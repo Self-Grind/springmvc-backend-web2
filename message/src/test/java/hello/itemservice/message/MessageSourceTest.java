@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+
+import java.util.Locale;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -33,5 +36,10 @@ public class MessageSourceTest {
     void notFoundMessageCodeDefaultMessage() {
         String result = ms.getMessage("no_code", null, "기본 메시지", null);
         assertThat(result).isEqualTo("기본 메시지");
+    }
+
+    @Test
+    void enLang() {
+        assertThat(ms.getMessage("hello", null, Locale.ENGLISH)).isEqualTo("hello");
     }
 }
