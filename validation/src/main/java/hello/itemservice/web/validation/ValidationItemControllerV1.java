@@ -83,6 +83,7 @@ public class ValidationItemControllerV1 {
     public String editForm(@PathVariable Long itemId, Model model) {
         Item item = itemRepository.findById(itemId);
         model.addAttribute("item", item);
+
         return "validation/v1/editForm";
     }
 
