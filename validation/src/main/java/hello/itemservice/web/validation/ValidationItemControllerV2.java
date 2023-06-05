@@ -87,17 +87,16 @@ public class ValidationItemControllerV2 {
     public String addItemV2(@ModelAttribute Item item, BindingResult bindingResult,
                             RedirectAttributes redirectAttributes) {
         if (!StringUtils.hasText(item.getItemName())) {
-            bindingResult.addError(new FieldError("item", "itemName",
-                    item.getItemName(), false, null, null, "상품 이름은 필수입니다."));
+            bindingResult.addError(new FieldError("item", "itemName", item.getItemName(), false, new String[]{"required.item.itemName"}, null, null));
         }
         if (item.getPrice() == null || item.getPrice() < 1000 || item.getPrice() >
                 1000000) {
             bindingResult.addError(new FieldError("item", "price", item.getPrice(),
-                    false, null, null, "가격은 1,000 ~ 1,000,000 까지 허용합니다."));
+                    false, new String[]{"range.item.price"}, null, null));
         }
         if (item.getQuantity() == null || item.getQuantity() > 10000) {
             bindingResult.addError(new FieldError("item", "quantity",
-                    item.getQuantity(), false, null, null, "수량은 최대 9,999 까지 허용합니다."));
+                    item.getQuantity(), false, new String[]{"max.item.quantity"}, null, null));
         }
         //특정 필드 예외가 아닌 전체 예외
         if (item.getPrice() != null && item.getQuantity() != null) {
@@ -109,6 +108,19 @@ public class ValidationItemControllerV2 {
         if (bindingResult.hasErrors()) {
             log.info("errors={}", bindingResult);
             return "validation/v2/addForm";
+        }
+        //성공 로직
+        Item savedItem = itemRepository.save(item);
+        redirectAttributes.addAttribute("itemId", savedItem.getId());
+        redirectAttributes.addAttribute("status", true);
+        return "redirect:/validation/v2/items/{itemId}";
+    }
+
+//    @PostMapping("/add")
+    public String addItemV3(@ModelAttribute Item item, BindingResult bindingResult, RedirectAttributes redirectAttributes){
+
+        if(!StringUtils.hasText(item.getItemName())){
+
         }
         //성공 로직
         Item savedItem = itemRepository.save(item);
