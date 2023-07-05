@@ -148,7 +148,7 @@ public class ValidationItemControllerV2 {
                     item.getQuantity(), false, new String[]{"max.item.quantity"}, new Object[]
                     {9999}, null));
         }
-//특정 필드 예외가 아닌 전체 예외
+        //특정 필드 예외가 아닌 전체 예외
         if (item.getPrice() != null && item.getQuantity() != null) {
             int resultPrice = item.getPrice() * item.getQuantity();
             if (resultPrice < 10000) {
@@ -160,7 +160,7 @@ public class ValidationItemControllerV2 {
             log.info("errors={}", bindingResult);
             return "validation/v2/addForm";
         }
-//성공 로직
+        //성공 로직
         Item savedItem = itemRepository.save(item);
         redirectAttributes.addAttribute("itemId", savedItem.getId());
         redirectAttributes.addAttribute("status", true);
