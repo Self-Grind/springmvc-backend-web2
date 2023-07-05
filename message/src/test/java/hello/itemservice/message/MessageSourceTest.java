@@ -1,13 +1,15 @@
 package hello.itemservice.message;
 
 
-import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+
+import java.util.Locale;
 
 import java.util.Locale;
 
@@ -20,6 +22,10 @@ public class MessageSourceTest {
     @Autowired
     MessageSource ms;
 
+    @BeforeEach
+    void setup(){
+        Locale.setDefault(Locale.KOREA);
+    }
     @Test
     void helloMessage() {
         String result = ms.getMessage("hello", null, null);
@@ -42,4 +48,24 @@ public class MessageSourceTest {
     void enLang() {
         assertThat(ms.getMessage("hello", null, Locale.ENGLISH)).isEqualTo("hello");
     }
+
+    @Test
+    void argumentMessage() {
+        String result = ms.getMessage("hello.name", new Object[]{"Spring"}, null);
+        assertThat(result).isEqualTo("안녕 Spring");
+    }
+
+    @Test
+    void defaultLang() {
+        assertThat(ms.getMessage("hello", null, null)).isEqualTo("안녕");
+        assertThat(ms.getMessage("hello", null, Locale.KOREA)).isEqualTo("안녕");
+
+    }
+
+    @Test
+    void enLang() {
+        assertThat(ms.getMessage("hello", null, Locale.ENGLISH)).isEqualTo("hello");
+    }
+
+
 }
